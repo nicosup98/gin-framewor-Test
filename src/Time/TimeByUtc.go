@@ -16,7 +16,7 @@ import (
 func PostTimeByUtc() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		body := timemodels.TimeByUtcDTO{}
-		ctx.Bind(&body)
+		ctx.ShouldBindJSON(&body)
 		fmt.Printf("date %v time %v", body.Date, body.TimeZone)
 		horaRaw := strings.Split(body.Date, ":")
 		hora, _ := strconv.ParseInt(horaRaw[0], 10, 0)
@@ -24,7 +24,8 @@ func PostTimeByUtc() gin.HandlerFunc {
 		segundo, _ := strconv.ParseInt(horaRaw[2], 10, 0)
 		now := time.Now()
 		timeConverted := time.Date(now.Year(), now.Month(), now.Day(), int(hora), int(minuto), int(segundo), 0, time.UTC)
-		timeToset := 3600000000000 * body.TimeZone
+		timeZone, _ := strconv.ParseInt(body.TimeZone, 10, 0)
+		timeToset := 3600000000000 * timeZone
 		resp := map[string]map[string]string{
 			"response": {
 				"time": timeConverted.Add(time.Duration(timeToset)).Format("3:04:05 PM"),

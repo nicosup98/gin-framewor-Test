@@ -6,8 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func TimeByUtcController() *gin.Engine {
-	api := gin.Default()
+func TimeByUtcController(api *gin.Engine) {
 	api.POST("/timeByUtc", time.PostTimeByUtc())
-	return api
+}
+
+func OtherController(api *gin.Engine) {
+	api.GET("/", func(ctx *gin.Context) {
+		ctx.String(200, "%v", "hola")
+	})
 }
